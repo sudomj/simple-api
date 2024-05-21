@@ -1,0 +1,36 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: simple-api-depl
+  labels:
+    name: simple-api-depl
+spec:
+  replicas: 10
+  selector:
+    matchLabels:
+      app: simple-api
+  template:
+    metadata:
+      name: simple-api
+      labels:
+        app: simple-api
+    spec:
+      containers:
+      - name: simple-api
+        image: mjxy9/simple-api:v0.0.2
+        resources:
+          limits:
+            memory: "256Mi"
+            cpu: "500m"
+        ports:
+          - containerPort: 3000
+        env:
+          - name: APP_PORT
+            value: :3000
+        livenessProbe:
+          httpGet:
+            path: /health
+            scheme: HTTP
+            port: 3000
+          initialDelaySeconds: 5
+          periodSeconds: 10

@@ -10,8 +10,10 @@ RUN go build cmd/main.go
 
 FROM gcr.io/distroless/static-debian11
 
-COPY --from=golang /app .
+WORKDIR /app
+
+COPY --from=golang /app/main .
 
 EXPOSE 3000
 
-CMD ["/app"]
+CMD ["/app/main"]
